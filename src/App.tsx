@@ -1,95 +1,89 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState, useReducer } from 'react';
+import { TodoProps, TodoAction, Todo as Todos } from './types.js'
 
-// import { faker } from '@faker-js/faker'
 
-import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space } from '@mantine/core';
-import { useListState, /* useToggle */ } from '@mantine/hooks';
+import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space, Modal } from '@mantine/core';
 import { IconPencil, /* IconCircleMinus */ } from '@tabler/icons';
+import { faker } from '@faker-js/faker';
 
-function useToggleObject<T, U>(initial: [T, U]): [T | U, () => void] {
-  const [value, setValue] = useState<T | U>(initial[0]);
-  const [used, setUsed] = useState<0 | 1>(0);
 
-  // const toggle: () => void = (): void => setValue({ ...value } === { ...initial[0] } ? { ...initial[1] } : { ...initial[0] })
-  const toggle: () => void = (): void => {
-    const index = used === 0 ? 1 : 0
-    setValue(initial[index])
-    setUsed(index)
-  }
-
-  return [value, toggle]
+const uuid = (from: string=""): number => {
+  const val: number = parseInt((Math.random() * 1000).toString().split(".")[0])
+  if(from !== "fake()") console.log(`${val}${from ? ", called from " + from : ""}`)
+  return val
 }
-
-function useObject<T>(init: T): [T, (val: T) => void] {
-  const [value, setValue] = useState<T>(init);
-
-  const setObject: (val: T) => void = (val: T): void => setValue(prev => ({ ...prev, ...val }))
-  
-  return [value, setObject]
-}
-
-
-interface TodoType {
-  complete: boolean;
-  text: string,
-}
+const fake = (): Todos => ({ complete: false, id: uuid("fake()"), text: faker.animal.cat() })
 
 export default function App() {
   const [input, setInput] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [scrollArea, setScrollArea] = useObject<{ height: string, width: string }>({ height: "40%", width: "20rem" })
-  const [todos, todosHandler] = useListState<TodoType>([
-    { text: "First todo", complete: false },
-    { text: "Second todo", complete: false },
-    { text: "Third todo", complete: true },
-    { text: "Fourth todo", complete: false },
-  ])
-
-  const ids: number[] = []
-
-  const uuid: () => number = (): number => {
-    const ret: number = (ids.at(-1) || 0) + 1
-    ids.push(ret)
-    return ret
-  }
-
-  const clearTodos: () => void = (): void => {
-    todosHandler.setState([]);
-  };
+  const [scrollArea, setScrollArea] = useObject<{ height: string, width: string; }>({ height: "40%", width: "20rem" });
+  const [todos, dispatch] = useReducer((state: Todos[], action: TodoAction) => {
+    switch(action.type) {
+      case "add":
+        return [...state, action.content]
+      case "remove":
+        return state.filter(i => i.id !== action.id)
+      case "empty":
+        return []
+      case "update":
+        return state.map(i => i.id === action.id ? { ...i, complete: action.complete } : i)
+      default:
+        return state
+    }
+  }, [fake(), fake(), fake()])
 
   const submit: () => void = (): void => {
     if (!input) {
       setError("Field cannot be empty!");
       return;
     }
-    todosHandler.append({ text: input, complete: false });
+    dispatch({ type: "add", content: { complete: false, id: uuid("submit"), text: input } })
+    /* todosHandler.append({ text: input, complete: false }); */
     setInput("");
   };
+  
+  const Todo: React.FC<TodoProps> = ({ dispatch, id, complete, text }): JSX.Element => {
+    /* const [complete, setComplete] = useState<boolean>(false); */
 
-  const Todo: React.FC<{ text: string, complete: boolean }> = ({ text, complete }): JSX.Element => {
-    // const [active, setActive] = useState<boolean>(false);
-    const untoggled: React.CSSProperties = { minHeight: '3rem', maxHeight: '6rem', maxWidth: '12rem' }
-    const toggledState: typeof untoggled = { height: '100%', width: '100%', position: 'absolute', zIndex: 1 }
+    const [active, setActive] = useState<boolean>(false);
+    const wrapper: (val: boolean) => (() => void) = (val: boolean): (() => void) => { return () => { setActive(val) } }
+    // const untoggled: React.CSSProperties = { minHeight: '3rem', maxHeight: '6rem', maxWidth: '12rem' };
+    // const toggledState: React.CSSProperties = { height: '100%', width: '100%', position: 'absolute', zIndex: 1 };
 
-    const [style, toggleStyle] = useToggleObject<React.CSSProperties, React.CSSProperties>([untoggled, toggledState])
+    // const [style, toggleStyle] = useToggleObject<React.CSSProperties, React.CSSProperties>([untoggled, toggledState]);
 
     return <>
-      <Button
-        variant={complete ? 'filled' : 'gradient'}
-        color={complete ? 'green' : 'red'}
-        style={{ margin: '1rem', ...style }}
-        onClick={() => {
-          toggleStyle()
-          
-        }}
-        key={uuid()}
-      >
-        {/* minus icon here */}{text.length > 12 ? text.slice(0, 12) + '...' : text}{/* check icon here */}
-      </Button>
-    </>;
-  };
+      <div key={id}>
+        <Button
+          variant={complete ? 'filled' : 'gradient'}
+          color={complete ? 'green' : 'red'}
+          style={{ margin: '1rem', minHeight: '3rem', maxHeight: '6rem', maxWidth: '12rem' }}
+          onClick={wrapper(true)}
+        >
+          {/* minus icon here */}{text.length > 12 ? text.slice(0, 12) + '...' : text}{/* check icon here */}
+        </Button>
+        <Modal centered withCloseButton={true} opened={active} onClose={wrapper(false)}>
+            { active ?
+            <>
 
+                <Button onClick={() => dispatch({ type: 'remove', id: id })}>Delete</Button>
+                <Button
+                  onClick={() => dispatch({ type: 'update', id: id, complete: !complete })}
+                >{complete ? "Not complete" : "Complete task"}</Button>
+
+            </> : <>
+              
+              </>
+
+            }
+          <Stack justify="center">
+          </Stack>
+        </Modal>
+      </div>
+    </>;
+  }
 
   return <>
     <Container fluid style={{ backgroundColor: "rgb(234 255 229)", height: '100vh' }}>
@@ -106,9 +100,11 @@ export default function App() {
           <ScrollArea type='always' scrollbarSize={4} style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', borderRadius: '10%', ...scrollArea }}>
             <Stack spacing='md' justify='space-around' align='center' style={{ textAlign: 'center' }}>
               <Space h='xs' />
-              {todos.map(i => <>
-                <Todo complete={i.complete} text={i.text}/>
-              </>)}
+              <div>
+                {todos.map(i => <>
+                  <Todo dispatch={dispatch} id={i.id} complete={i.complete} text={i.text}/>
+                </>)}
+              </div>
               <Space h='xs' />
             </Stack >
           </ScrollArea>
@@ -119,4 +115,12 @@ export default function App() {
     </Container>
 
   </>;
+}
+
+function useObject<T>(init: T): [T, (val: T) => void] {
+  const [value, setValue] = useState<T>(init);
+
+  const setObject: (val: T) => void = (val: T): void => setValue(prev => ({ ...prev, ...val }))
+
+  return [value, setObject]
 }

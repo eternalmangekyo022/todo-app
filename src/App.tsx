@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useRef, useState, useReducer, useMemo } from 'react';
+import React, { useRef, useState, useReducer } from 'react';
 import { TodoProps, TodoAction, Todo as Todos } from './types.js'
 import Todo from './components/Todo.js'
 

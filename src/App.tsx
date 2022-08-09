@@ -8,12 +8,9 @@ import { IconPencil, /* IconCircleMinus */ } from '@tabler/icons';
 import { faker } from '@faker-js/faker';
 
 
-const uuid = (from: string=""): number => {
-  const val: number = parseInt((Math.random() * 1000).toString().split(".")[0])
-  if(from !== "fake()") console.log(`${val}${from ? ", called from " + from : ""}`)
-  return val
-}
-const fake = (): Todos => ({ complete: false, id: uuid("fake()"), text: faker.animal.cat() })
+const uuid = (): number => parseInt((Math.random() * 1000).toString().split(".")[0])
+
+const fake = (): Todos => ({ complete: false, id: uuid(), text: faker.name.findName() })
 
 export default function App() {
   const [input, setInput] = useState<string>("");
@@ -39,7 +36,7 @@ export default function App() {
       setError("Field cannot be empty!");
       return;
     }
-    dispatch({ type: "add", content: { complete: false, id: uuid("submit"), text: input } })
+    dispatch({ type: "add", content: { complete: false, id: uuid(), text: input } })
     /* todosHandler.append({ text: input, complete: false }); */
     setInput("");
   };

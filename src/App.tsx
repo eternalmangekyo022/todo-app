@@ -9,7 +9,6 @@ import { faker } from '@faker-js/faker';
 
 
 const uuid = (): number => parseInt((Math.random() * 1000).toString().split(".")[0])
-
 const fake = (): Todos => ({ complete: false, id: uuid(), text: faker.name.findName() })
 
 export default function App() {

@@ -1,10 +1,10 @@
 import './App.css';
-import React, { useRef, useState, useReducer } from 'react';
+import React, { useRef, useState, useReducer, useMemo } from 'react';
 import { TodoProps, TodoAction, Todo as Todos } from './types.js'
 import Todo from './components/Todo.js'
 
 import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space, Modal } from '@mantine/core';
-import { IconPencil, /* IconCircleMinus */ } from '@tabler/icons';
+import { IconPencil, /* IconCircleMinus */  } from '@tabler/icons';
 import { faker } from '@faker-js/faker';
 
 

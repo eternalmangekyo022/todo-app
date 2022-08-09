@@ -1,7 +1,7 @@
 import './App.css';
 import React, { useRef, useState, useReducer } from 'react';
 import { TodoProps, TodoAction, Todo as Todos } from './types.js'
-
+import Todo from './components/Todo.js'
 
 import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space, Modal } from '@mantine/core';
 import { IconPencil, /* IconCircleMinus */ } from '@tabler/icons';
@@ -44,46 +44,6 @@ export default function App() {
     setInput("");
   };
   
-  const Todo: React.FC<TodoProps> = ({ dispatch, id, complete, text }): JSX.Element => {
-    /* const [complete, setComplete] = useState<boolean>(false); */
-
-    const [active, setActive] = useState<boolean>(false);
-    const wrapper: (val: boolean) => (() => void) = (val: boolean): (() => void) => { return () => { setActive(val) } }
-    // const untoggled: React.CSSProperties = { minHeight: '3rem', maxHeight: '6rem', maxWidth: '12rem' };
-    // const toggledState: React.CSSProperties = { height: '100%', width: '100%', position: 'absolute', zIndex: 1 };
-
-    // const [style, toggleStyle] = useToggleObject<React.CSSProperties, React.CSSProperties>([untoggled, toggledState]);
-
-    return <>
-      <div key={id}>
-        <Button
-          variant={complete ? 'filled' : 'gradient'}
-          color={complete ? 'green' : 'red'}
-          style={{ margin: '1rem', minHeight: '3rem', maxHeight: '6rem', maxWidth: '12rem' }}
-          onClick={wrapper(true)}
-        >
-          {/* minus icon here */}{text.length > 12 ? text.slice(0, 12) + '...' : text}{/* check icon here */}
-        </Button>
-        <Modal centered withCloseButton={true} opened={active} onClose={wrapper(false)}>
-            { active ?
-            <>
-
-                <Button onClick={() => dispatch({ type: 'remove', id: id })}>Delete</Button>
-                <Button
-                  onClick={() => dispatch({ type: 'update', id: id, complete: !complete })}
-                >{complete ? "Not complete" : "Complete task"}</Button>
-
-            </> : <>
-              
-              </>
-
-            }
-          <Stack justify="center">
-          </Stack>
-        </Modal>
-      </div>
-    </>;
-  }
 
   return <>
     <Container fluid style={{ backgroundColor: "rgb(234 255 229)", height: '100vh' }}>
@@ -98,13 +58,11 @@ export default function App() {
             <Button onClick={submit} variant='light' color='green'>Add todo</Button>
           </Stack>
           <ScrollArea type='always' scrollbarSize={4} style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', borderRadius: '10%', ...scrollArea }}>
-            <Stack spacing='md' justify='space-around' align='center' style={{ textAlign: 'center' }}>
+            <Stack spacing='md' justify='space-around' align='center'>
               <Space h='xs' />
-              <div>
                 {todos.map(i => <>
                   <Todo dispatch={dispatch} id={i.id} complete={i.complete} text={i.text}/>
                 </>)}
-              </div>
               <Space h='xs' />
             </Stack >
           </ScrollArea>

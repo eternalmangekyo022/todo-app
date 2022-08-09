@@ -14,7 +14,6 @@ const fake = (): Todos => ({ complete: false, id: uuid(), text: faker.name.findN
 export default function App() {
   const [input, setInput] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [scrollArea, setScrollArea] = useObject<{ height: string, width: string; }>({ height: "40%", width: "20rem" });
   const [todos, dispatch] = useReducer((state: Todos[], action: TodoAction) => {
     switch(action.type) {
       case "add":
@@ -53,7 +52,7 @@ export default function App() {
             }}></Input>
             <Button onClick={submit} variant='light' color='green'>Add todo</Button>
           </Stack>
-          <ScrollArea type='always' scrollbarSize={4} style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', borderRadius: '10%', ...scrollArea }}>
+          <ScrollArea type='always' scrollbarSize={4} style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)', borderRadius: '10%', height: "40%", width: "20rem" }}>
             <Stack spacing='md' justify='space-around' align='center'>
               <Space h='xs' />
                 {todos.map(i => <>

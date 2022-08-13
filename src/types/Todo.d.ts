@@ -12,7 +12,7 @@ export interface TodoProps extends Todo {
 
 export type TodoAction =
 {
-    type: "add"
+    type: 'add'
     content: Todo
 } | 
 {
@@ -20,10 +20,10 @@ export type TodoAction =
     id: number
 } | 
 {
-    type: "empty"
+    type: 'empty'
 } | 
 {
-    type: "update"
+    type: 'update'
     id: number
     complete: boolean
 }

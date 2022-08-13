@@ -1,6 +1,6 @@
 import './App.css';
-import React, { useRef, useState, useReducer } from 'react';
-import { TodoProps, TodoAction, Todo as Todos } from './types.js'
+import { useState, useReducer } from 'react';
+import { TodoAction, Todo as Todos } from './types/Todo.js'
 import Todo from './components/Todo.js'
 
 import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space, Modal } from '@mantine/core';
@@ -11,7 +11,7 @@ import { faker } from '@faker-js/faker';
 const uuid = (): number => parseInt((Math.random() * 1000).toString().split(".")[0])
 const fake = (): Todos => ({ complete: false, id: uuid(), text: faker.name.findName() })
 
-export default function App() {
+function App(): JSX.Element {
   const [input, setInput] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [todos, dispatch] = useReducer((state: Todos[], action: TodoAction) => {
@@ -63,10 +63,7 @@ export default function App() {
           </ScrollArea>
         </Stack>
       </Center>
-
-
     </Container>
-
   </>;
 }
 
@@ -77,3 +74,5 @@ function useObject<T>(init: T): [T, (val: T) => void] {
 
   return [value, setObject]
 }
+
+export default App

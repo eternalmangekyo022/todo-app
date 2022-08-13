@@ -1,3 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@700&display=swap');
+* {
+    font-family: 'Comfortaa';
+}
+
 body {
     height: 100vh;
     width: 100vw;

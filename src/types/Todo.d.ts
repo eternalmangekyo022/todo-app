@@ -8,6 +8,7 @@ export interface Todo {
 
 export interface TodoProps extends Todo {
     dispatch: React.Dispatch<TodoAction>
+    last: boolean
 }
 
 export type TodoAction =

@@ -59,8 +59,8 @@ function App(): JSX.Element {
   return <>
     <Container fluid style={{ backgroundColor: "rgb(234 255 229)", height: '100vh' }}>
       <Center style={{ width: '100%', height: '100%' }}>
-        <Stack /* contains addingTodos & todosListingSection */ spacing={80} justify='center' align='center' style={{ width: '40%', height: '100%' }}>
-          <Stack justify='space-around' align='center' style={{ height: '30vh', width: '50%', marginTop: "-20%", backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '10%' }}>
+        <Stack /* input section */ spacing={80} justify='center' align='center' style={{ width: '40%', height: '100%' }}>
+          <Stack justify='space-around' align='center' style={{ height: '30vh', width: 'clamp(13rem, 60vw, 20rem)', marginTop: "-20%", backgroundColor: 'rgba(0, 0, 0, 0.2)', borderRadius: '10%' }}>
             <Input radius='lg' variant='filled' error={error} icon={<IconPencil></IconPencil>} style={{ width: '80%', marginTop: '10%' }} placeholder='Type todo here...' value={input} onChange={(e: { target: { value: string; }; }) => {
               const _ = e.target.value;
               if (error && _ !== "") setError("");

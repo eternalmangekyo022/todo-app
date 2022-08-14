@@ -3,7 +3,7 @@ import React, { useState, useReducer, useEffect } from 'react';
 import { TodoAction, Todo as Todos } from './types/Todo.js'
 import Todo from './components/Todo.js'
 
-import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space, Notification } from '@mantine/core';
+import { Container, Center, Stack, Button, ScrollArea, Space, Notification } from '@mantine/core';
 /* import { IconPencil  } from '@tabler/icons'; */
 /* import { faker } from '@faker-js/faker'; */
 

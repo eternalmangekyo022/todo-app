@@ -4,7 +4,7 @@ import { TodoAction, Todo as Todos } from './types/Todo.js'
 import Todo from './components/Todo.js'
 
 import { Container, Center, Stack, Button, TextInput as Input, ScrollArea, Space, Notification } from '@mantine/core';
-import { IconPencil, /* IconCircleMinus */  } from '@tabler/icons';
+import { IconPencil  } from '@tabler/icons';
 /* import { faker } from '@faker-js/faker'; */
 
 const uuid = (): number => parseInt((Math.random() * 10000).toString().split(".")[0])

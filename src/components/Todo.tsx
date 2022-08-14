@@ -27,7 +27,7 @@ function Todo({ dispatch, id, complete, text, last }: TodoProps): JSX.Element {
                 </Container>
 {/* 20% */}     <Button color={ complete ? "red" : "green"} style={{ width: '20%', right: '1rem', position: 'absolute' }} onClick={() => dispatch({ type: "update", id, complete: !complete })}>{complete ? <IconX/> : <IconCheck/>}</Button>
             </Stack>
-            <Modal style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} centered withCloseButton={true} opened={active} onClose={activeWrapper(false)} >
+            <Modal style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} centered withCloseButton={false} opened={active} onClose={activeWrapper(false)}>
                 <Center>
                     <Text>{text}</Text>
                 </Center>

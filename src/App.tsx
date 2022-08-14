@@ -14,7 +14,7 @@ const fake = (): Todos => {
 
 
 function App(): JSX.Element {
-  const [notify, setNotify] = useState<boolean>(true);
+  const [notify, setNotify] = useState<React.CSSProperties>({});
   const [input, setInput] = useState<string>("");
   const [todos, dispatch] = useReducer((state: Todos[], action: TodoAction) => {
     switch(action.type) {
@@ -42,7 +42,7 @@ function App(): JSX.Element {
   };
   
   useEffect(() => {
-    const _id = setTimeout(() => setNotify(false), 5000)
+    const _id = setTimeout(() => setNotify({ right: '-10%', opacity: 0 }), 3000)
     return () => clearTimeout(_id)
   }, [])
 
@@ -70,7 +70,7 @@ function App(): JSX.Element {
           </ScrollArea>
         </Stack>
       </Center>
-      { notify && <Notification disallowClose color='yellow' style={{ position: 'fixed', bottom: 'clamp(.5rem, 10%, 1rem)', right: '1%', userSelect: 'none' }} title='🚧'>Site under construction</Notification>}
+      <Notification disallowClose color='yellow' style={{ position: 'fixed', bottom: 'clamp(.5rem, 10%, 1rem)', right: '1%', userSelect: 'none', transition: '600ms', ...notify }} title='🚧'>Site under construction</Notification>
 
     </Container>
   </>;
